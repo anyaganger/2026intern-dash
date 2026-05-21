@@ -2,118 +2,52 @@ name: Update Shipping Industry Summary
  
 on:
   schedule:
-    - cron: '0 7 * * *'  # Runs daily at 7 AM UTC
-  workflow_dispatch:  # Allows manual trigger from GitHub
+    - cron: '0 7 * * *'
+  workflow_dispatch:
  
 jobs:
   update-summary:
     runs-on: ubuntu-latest
- 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
  
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
- 
-      - name: Install dependencies
-        run: npm install @anthropic-ai/sdk
- 
-      - name: Generate shipping industry summary
+      - name: Generate shipping summary with Claude
         id: generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          node -e "
-          const Anthropic = require('@anthropic-ai/sdk');
-          const fs = require('fs');
- 
-          const client = new Anthropic();
- 
-          (async () => {
-            const message = await client.messages.create({
-              model: 'claude-opus-4-6',
-              max_tokens: 1500,
-              messages: [
+          curl -X POST https://api.anthropic.com/v1/messages \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -H "content-type: application/json" \
+            -d '{
+              "model": "claude-opus-4-6",
+              "max_tokens": 1500,
+              "messages": [
                 {
-                  role: 'user',
-                  content: \`Search for the latest shipping industry news, maritime decarbonization trends, and regulatory developments relevant to the carbon shipping sector. Focus on:
- 
-1. Recent regulatory changes (EU ETS, IMO updates, FuelEU Maritime)
-2. Alternative fuel developments (methanol, ammonia, hydrogen)
-3. New maritime tech innovations and decarbonization solutions
-4. Ship owner adoption trends and fleet modernization
-5. Major shipping industry news from TradeWinds, Lloyd's List, and maritime publications
- 
-Generate a concise 15-minute read summary for today (today's date: \${new Date().toLocaleDateString()}). Format it as:
- 
----SUMMARY_START---
-<h3 style=\"font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;\">Industry Summary (15-min read) - Updated \${new Date().toLocaleDateString()}</h3>
- 
-<div class=\"info-item\">
-<strong>The Big Picture</strong>
-<p>[summary paragraph about current shipping landscape and carbon regulations]</p>
-</div>
- 
-<div class=\"info-item\" style=\"margin-top: 12px;\">
-<strong>Regulatory Tailwinds (Perfect for Carbon Ridge)</strong>
-<p>[bullet points on current regulations]</p>
-</div>
- 
-<div class=\"info-item\" style=\"margin-top: 12px;\">
-<strong>Market Dynamics</strong>
-<p>[bullet points on market trends]</p>
-</div>
- 
-<div class=\"info-item\" style=\"margin-top: 12px;\">
-<strong>Alternative Fuels & Technology</strong>
-<p>[bullet points on latest developments]</p>
-</div>
- 
-<div class=\"info-item\" style=\"margin-top: 12px;\">
-<strong>What to Watch</strong>
-<p>Check TradeWinds and Lloyd's List weekly for: [key focus areas]</p>
-</div>
----SUMMARY_END---
- 
-Make it directly relevant to Carbon Ridge's maritime decarbonization business. Keep it actionable and timely.\`
+                  "role": "user",
+                  "content": "Search for the latest shipping industry news, maritime decarbonization trends, and regulatory developments. Focus on: 1) Recent regulatory changes (EU ETS, IMO updates, FuelEU Maritime), 2) Alternative fuel developments (methanol, ammonia, hydrogen), 3) New maritime tech innovations, 4) Ship owner adoption trends, 5) Major shipping industry news. Generate a concise 15-minute read summary for today. Format as HTML with these sections: The Big Picture, Regulatory Tailwinds, Market Dynamics, Alternative Fuels & Technology, and What to Watch. Make it relevant to maritime decarbonization/shipping optimization. Today's date: '$(date +%Y-%m-%d)'"
                 }
               ]
-            });
+            }' > response.json
  
-            const content = message.content[0].text;
-            const summaryMatch = content.match(/---SUMMARY_START---([\s\S]*?)---SUMMARY_END---/);
- 
-            if (summaryMatch) {
-              const summary = summaryMatch[1].trim();
-              console.log('GENERATED_SUMMARY=' + summary);
-            } else {
-              throw new Error('Could not extract summary from response');
-            }
-          })();
-          \`
+          cat response.json
+          echo "SUMMARY_RESPONSE=$(cat response.json)" >> $GITHUB_ENV
  
       - name: Update HTML file
         run: |
-          SUMMARY="${{ steps.generate.outputs.GENERATED_SUMMARY }}"
- 
-          # Read the current file
-          FILE_CONTENT=\$(cat internship-hq.html)
- 
-          # Replace the old summary section with new one
-          UPDATED_CONTENT=\$(echo "\$FILE_CONTENT" | sed -z 's/<h3 style=\"font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;\">Industry Summary (15-min read).*?<\/div>//s')
- 
-          # Insert the new summary after the background reading section
-          UPDATED_CONTENT=\$(echo "\$UPDATED_CONTENT" | sed -z "s/\(Contact.*<\/div>\n.*<\/div>\n\n.*<h3 style=\"font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;\">Key Concepts<\/h3>\)/\1\n\n\$SUMMARY\n/")
- 
-          echo "\$UPDATED_CONTENT" > internship-hq.html
+          # For now, just verify the file exists
+          if [ -f "internship-hq.html" ]; then
+            echo "File found, ready for update"
+            # You'll need to parse the response and update manually
+            # For this initial test, we'll just verify the API call works
+          fi
  
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add internship-hq.html
-          git commit -m "chore: update shipping industry summary - $(date +'%Y-%m-%d')" || echo "No changes to commit"
-          git push
+          git config --local user.name "GitHub Action Bot"
+          git add -A || true
+          git commit -m "chore: shipping summary update - $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push || echo "Nothing to push"
