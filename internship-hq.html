@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anya's Internship HQ - Carbon Ridge 2026</title>
+    <title>Internship HQ - Carbon Ridge 2026</title>
     <style>
         * {
             margin: 0;
@@ -12,360 +12,346 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 20px;
         }
 
         header {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
+            margin-bottom: 40px;
         }
 
         header h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #000;
         }
 
         header p {
             color: #666;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
 
-        .search-bar {
-            margin-top: 20px;
+        .search-box {
+            margin: 30px 0;
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .search-bar input {
+        .search-box input {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-family: inherit;
         }
 
-        .search-bar input:focus {
+        .search-box input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #999;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
         }
 
-        .search-bar button {
-            padding: 12px 30px;
-            background: #667eea;
+        .search-box button {
+            padding: 10px 16px;
+            background: #000;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-size: 0.95em;
+            font-weight: 500;
         }
 
-        .search-bar button:hover {
-            background: #764ba2;
+        .search-box button:hover {
+            background: #333;
         }
 
-        .grid {
+        .search-box button.secondary {
+            background: #f0f0f0;
+            color: #000;
+        }
+
+        .search-box button.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        section h2 {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #000;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+        }
+
+        .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
         }
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+        .info-item {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 16px;
+            background: #fafafa;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .card h3 {
-            color: #764ba2;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .info-block {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-        }
-
-        .info-block strong {
-            color: #333;
+        .info-item strong {
             display: block;
-            margin-bottom: 5px;
+            color: #000;
+            margin-bottom: 6px;
+            font-size: 0.95em;
         }
 
-        .info-block p {
+        .info-item p {
             color: #666;
-            line-height: 1.6;
+            font-size: 0.9em;
+            line-height: 1.5;
         }
 
-        .contact-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
+        .contact-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .contact-card {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 14px;
+            background: #fafafa;
+        }
+
+        .contact-card .name {
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .contact-card .role {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+        }
+
+        .contact-card .info {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .input-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
-        .contact-name {
-            font-weight: bold;
-            color: #333;
+        .input-group input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-family: inherit;
         }
 
-        .contact-role {
-            color: #764ba2;
-            font-size: 0.9em;
+        .input-group input:focus {
+            outline: none;
+            border-color: #999;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
         }
 
-        .contact-info {
-            color: #666;
-            font-size: 0.9em;
+        .input-group button {
+            padding: 10px 16px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .input-group button:hover {
+            background: #333;
         }
 
         textarea {
             width: 100%;
-            min-height: 120px;
+            min-height: 140px;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             font-family: inherit;
-            font-size: 1em;
+            font-size: 0.95em;
             resize: vertical;
-            margin-bottom: 10px;
-            transition: border-color 0.3s;
+            margin-bottom: 12px;
         }
 
         textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #999;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
         }
 
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
-        .btn {
-            padding: 10px 20px;
+        .button-group button {
+            flex: 1;
+            padding: 10px 16px;
+            background: #000;
+            color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-            flex: 1;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #764ba2;
-        }
-
-        .btn-secondary {
-            background: #ddd;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #bbb;
-        }
-
-        .goal-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #667eea;
-        }
-
-        .goal-item.completed {
-            opacity: 0.6;
-            text-decoration: line-through;
-        }
-
-        .goal-checkbox {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .timeline-item {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .timeline-marker {
-            width: 30px;
-            height: 30px;
-            background: #667eea;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            margin-right: 20px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .timeline-content {
-            flex: 1;
-        }
-
-        .timeline-content strong {
-            color: #333;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .timeline-content p {
-            color: #666;
             font-size: 0.95em;
+            font-weight: 500;
         }
 
-        .key-insight {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            line-height: 1.6;
+        .button-group button:hover {
+            background: #333;
         }
 
-        .question-item {
-            background: #f8f9fa;
+        .button-group button.secondary {
+            background: #f0f0f0;
+            color: #000;
+        }
+
+        .button-group button.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .list-item {
+            border: 1px solid #eee;
+            border-radius: 6px;
             padding: 12px;
-            border-radius: 8px;
             margin-bottom: 10px;
+            background: #fafafa;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-left: 4px solid #667eea;
+            gap: 12px;
         }
 
-        .question-text {
+        .list-item input[type="checkbox"] {
+            margin-top: 3px;
+            cursor: pointer;
+        }
+
+        .list-item.completed {
+            opacity: 0.6;
+        }
+
+        .list-item.completed .text {
+            text-decoration: line-through;
+        }
+
+        .list-item .text {
             flex: 1;
             color: #333;
+            font-size: 0.95em;
         }
 
-        .remove-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+        .list-item button {
+            padding: 4px 10px;
+            background: #f0f0f0;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 0.85em;
-            margin-left: 10px;
+            white-space: nowrap;
         }
 
-        .remove-btn:hover {
-            background: #ff5252;
+        .list-item button:hover {
+            background: #e0e0e0;
+            color: #000;
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-box .number {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .stat-box .label {
+        .empty-state {
+            color: #999;
             font-size: 0.9em;
-            opacity: 0.9;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            background: #fafafa;
         }
 
-        .tab-container {
+        .timeline {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            gap: 16px;
         }
 
-        @media (max-width: 768px) {
+        .timeline-item {
+            border-left: 2px solid #ddd;
+            padding-left: 20px;
+            padding-bottom: 16px;
+        }
+
+        .timeline-item:last-child {
+            border-left: 2px solid #ddd;
+        }
+
+        .timeline-item strong {
+            color: #000;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .timeline-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .hint {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: #eee;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 600px) {
             header h1 {
-                font-size: 1.8em;
+                font-size: 1.5em;
             }
 
-            .grid {
+            .info-grid {
                 grid-template-columns: 1fr;
             }
 
-            .search-bar {
+            .input-group {
                 flex-direction: column;
             }
-        }
 
-        .note-preview {
-            color: #666;
-            font-size: 0.95em;
-            max-height: 100px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            .button-group {
+                flex-direction: column;
+            }
         }
 
         .hidden {
@@ -376,348 +362,299 @@
 <body>
     <div class="container">
         <header>
-            <h1>🚢 Internship HQ - Summer 2026</h1>
-            <p>Carbon Ridge | Summer Analyst | NYC</p>
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search across all sections...">
-                <button onclick="globalSearch()">Search</button>
-                <button onclick="clearSearch()" style="background: #999;">Clear</button>
-            </div>
+            <h1>Internship HQ</h1>
+            <p>Carbon Ridge | Summer Analyst | June - August 2026</p>
         </header>
 
-        <div class="stats">
-            <div class="stat-box">
-                <div class="number">10</div>
-                <div class="label">Weeks</div>
-            </div>
-            <div class="stat-box">
-                <div class="number">40</div>
-                <div class="label">Hours/Week</div>
-            </div>
-            <div class="stat-box">
-                <div class="number">$24</div>
-                <div class="label">Hourly</div>
-            </div>
-            <div class="stat-box">
-                <div class="number">NYC</div>
-                <div class="label">Location</div>
-            </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search across all sections...">
+            <button onclick="globalSearch()">Search</button>
+            <button class="secondary" onclick="clearSearch()">Clear</button>
         </div>
 
-        <div class="grid">
-            <!-- CARBON RIDGE SECTION -->
-            <div class="card" id="section-carbonridge">
-                <h2>💼 Carbon Ridge</h2>
+        <!-- CARBON RIDGE -->
+        <section id="section-carbonridge">
+            <h2>Carbon Ridge</h2>
 
-                <h3>Company Overview</h3>
-                <div class="key-insight">
-                    Decarbonizing shipping through AI-powered systems for maritime optimization. Hard-tech startup in Series A fundraising. First commercial deployment: Q1 2028.
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Company</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>What they do</strong>
+                    <p>Decarbonizing shipping through AI-powered systems for maritime optimization. Hard-tech startup in Series A fundraising.</p>
                 </div>
+                <div class="info-item">
+                    <strong>Timeline</strong>
+                    <p>First commercial deployment: Q1 2028. Series A in progress.</p>
+                </div>
+            </div>
 
-                <h3>Position Details</h3>
-                <div class="info-block">
-                    <strong>Title:</strong>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Your Role</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Position</strong>
                     <p>Summer Analyst</p>
                 </div>
-                <div class="info-block">
-                    <strong>Duration:</strong>
-                    <p>10 weeks | June 8 - August 14, 2026</p>
+                <div class="info-item">
+                    <strong>Reporting to</strong>
+                    <p>Phoebe Van Duinen<br><span style="color: #999;">Strategic Operations Lead</span></p>
                 </div>
-                <div class="info-block">
-                    <strong>Reporting to:</strong>
-                    <p>Phoebe Van Duinen (Strategic Operations Lead)</p>
+                <div class="info-item">
+                    <strong>Duration</strong>
+                    <p>10 weeks<br>June 8 - August 14, 2026</p>
                 </div>
-                <div class="info-block">
-                    <strong>Compensation:</strong>
-                    <p>$24/hour (40 hours/week, overtime eligible)</p>
+                <div class="info-item">
+                    <strong>Compensation</strong>
+                    <p>$24/hour<br>40 hours/week (overtime eligible)</p>
                 </div>
+            </div>
 
-                <h3>Location & Schedule</h3>
-                <div class="info-block">
-                    <strong>Address:</strong>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Office Details</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Location</strong>
                     <p>575 5th Ave, Floor 17, Office 128<br>New York, NY 10017</p>
                 </div>
-                <div class="info-block">
-                    <strong>Office Hours:</strong>
+                <div class="info-item">
+                    <strong>Schedule</strong>
                     <p>Mon-Thu: In-office (9am-5pm, flexible)<br>Fri: Remote</p>
                 </div>
-                <div class="info-block">
-                    <strong>Dress Code:</strong>
+                <div class="info-item">
+                    <strong>First Days</strong>
+                    <p>June 4: Remote onboarding<br>June 8: First in-office day</p>
+                </div>
+                <div class="info-item">
+                    <strong>Dress Code</strong>
                     <p>Casual</p>
                 </div>
-                <div class="info-block">
-                    <strong>First Day:</strong>
-                    <p>Thursday, June 4 (remote onboarding)<br>Monday, June 8 (in-office)</p>
-                </div>
+            </div>
 
-                <h3>Key Responsibilities</h3>
-                <div class="info-block">
-                    <p>• Market research & competitive analysis<br>
-                       • Evaluate new partnerships & commercial opportunities<br>
-                       • Create client-facing presentations<br>
-                       • Support investor & stakeholder communications<br>
-                       • Go-to-market initiatives & brand positioning</p>
-                </div>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Key Responsibilities</h3>
+            <div class="info-item">
+                <p>• Market research & competitive analysis<br>
+                   • Evaluate new partnerships & commercial opportunities<br>
+                   • Create client-facing presentations<br>
+                   • Support investor & stakeholder communications<br>
+                   • Go-to-market initiatives & brand positioning</p>
+            </div>
 
-                <h3>Onboarding</h3>
-                <div class="info-block">
-                    <strong>Contact:</strong>
-                    <p>Daniella Lara (Operations Manager)<br>
-                    C: 832-933-8459<br>
-                    E: dlara@carbonridge.net</p>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Onboarding</h3>
+            <div class="contact-list">
+                <div class="contact-card">
+                    <div class="name">Daniella Lara</div>
+                    <div class="role">Operations Manager</div>
+                    <div class="info">C: 832-933-8459 | dlara@carbonridge.net</div>
                 </div>
-                <div class="info-block">
-                    <strong>What to expect:</strong>
-                    <p>• Laptop provided on first day<br>
-                       • Key card access after day one<br>
-                       • New York State pay rate notice<br>
-                       • Employee Handbook review<br>
-                       • Acknowledgment of receipt & understanding</p>
+            </div>
+            <div class="info-item" style="margin-top: 12px;">
+                <strong>What to expect</strong>
+                <p>• Laptop provided on first day<br>
+                   • Key card access after day one<br>
+                   • New York State pay rate notice<br>
+                   • Employee Handbook review<br>
+                   • Acknowledgment of receipt & understanding</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- MARITIME RESEARCH -->
+        <section id="section-maritime">
+            <h2>Maritime Research</h2>
+
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Background Reading</h3>
+            <div class="contact-list">
+                <div class="contact-card">
+                    <div class="name">TradeWinds</div>
+                    <div class="info">Daily shipping news and market trends</div>
+                </div>
+                <div class="contact-card">
+                    <div class="name">Lloyd's List</div>
+                    <div class="info">Authoritative maritime intelligence</div>
+                </div>
+                <div class="contact-card">
+                    <div class="name">Blue Tide News</div>
+                    <div class="info">Maritime industry updates</div>
+                </div>
+                <div class="contact-card">
+                    <div class="name">Ship.Energy</div>
+                    <div class="info">Shipping efficiency & decarbonization</div>
+                </div>
+                <div class="contact-card">
+                    <div class="name">Maritime Carbon Intelligence</div>
+                    <div class="info">Carbon emissions & sustainability in shipping</div>
                 </div>
             </div>
 
-            <!-- MARITIME RESEARCH SECTION -->
-            <div class="card" id="section-maritime">
-                <h2>🌊 Maritime Research</h2>
-
-                <h3>Background Reading</h3>
-                <p style="color: #666; margin-bottom: 15px;">Key publications to understand the maritime industry:</p>
-                <div class="info-block">
-                    <strong>TradeWinds</strong>
-                    <p>Daily shipping news and market trends</p>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Key Concepts</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>The Challenge</strong>
+                    <p>Shipping is old-school and conservative. Owners reluctant to adopt new tech. Regulations evolving. Huge innovation opportunity.</p>
                 </div>
-                <div class="info-block">
-                    <strong>Lloyd's List</strong>
-                    <p>Authoritative maritime intelligence</p>
+                <div class="info-item">
+                    <strong>Fuel Quality</strong>
+                    <p>Ships use different fuel grades. Manual switching between types. Opportunity for automation.</p>
                 </div>
-                <div class="info-block">
-                    <strong>Blue Tide News</strong>
-                    <p>Maritime industry updates</p>
-                </div>
-                <div class="info-block">
-                    <strong>Ship.Energy</strong>
-                    <p>Shipping efficiency & decarbonization</p>
-                </div>
-                <div class="info-block">
-                    <strong>Maritime Carbon Intelligence</strong>
-                    <p>Carbon emissions & sustainability in shipping</p>
-                </div>
-
-                <h3>Key Concepts</h3>
-                <div class="key-insight">
-                    <strong>The Challenge:</strong> Shipping is a conservative, old-school industry. Owners reluctant to adopt new tech. Regulations evolving. Huge opportunity for innovation.
-                </div>
-
-                <div class="info-block">
-                    <strong>Fuel Quality:</strong>
-                    <p>Ships use different fuel grades. Manual switching between fuel types. Opportunity for automation.</p>
-                </div>
-                <div class="info-block">
-                    <strong>Scrubber Tech:</strong>
+                <div class="info-item">
+                    <strong>Scrubber Tech</strong>
                     <p>Manually operated equipment to reduce emissions. Regulation-dependent (varies by port). Carbon Ridge alternative in development.</p>
                 </div>
-                <div class="info-block">
-                    <strong>Legislation:</strong>
-                    <p>OCCS (operational carbon cutting systems) still being defined. Industry working groups shaping future regulations.</p>
-                </div>
-                <div class="info-block">
-                    <strong>Deployment Timeline:</strong>
-                    <p>Q1 2028 first commercial deployment. Customers don't need to see it before ordering. VCs unfamiliar with maritime timelines.</p>
-                </div>
-
-                <h3>Company Advantage</h3>
-                <div class="info-block">
-                    <p>• Proprietary hardware (hard to replicate)<br>
-                       • AI-powered optimization systems<br>
-                       • Lean team, critical AI integration<br>
-                       • Team experience: on-water logistics, shipbroking, VCs<br>
-                       • Engineers lived on ships to understand problems</p>
+                <div class="info-item">
+                    <strong>Legislation</strong>
+                    <p>OCCS (operational carbon cutting systems) still being defined. Industry working groups shaping regulations.</p>
                 </div>
             </div>
 
-            <!-- AI x FINANCE SECTION -->
-            <div class="card" id="section-aix">
-                <h2>💡 AI × Finance Ideas</h2>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Company Advantage</h3>
+            <div class="info-item">
+                <p>• Proprietary hardware (hard to replicate)<br>
+                   • AI-powered optimization systems<br>
+                   • Lean team, critical AI integration<br>
+                   • Team experience: on-water logistics, shipbroking, VCs<br>
+                   • Engineers lived on ships to understand problems firsthand</p>
+            </div>
+        </section>
 
-                <h3>AI in Operations</h3>
-                <div class="key-insight">
-                    Carbon Ridge is using AI to build internal tools that save time. Example: Sourcing engine built custom tools → sourced 3,000+ acquisition targets in weeks (vs. manual months).
+        <div class="section-divider"></div>
+
+        <!-- NETWORKING -->
+        <section id="section-networking">
+            <h2>Networking & Contacts</h2>
+
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Team</h3>
+            <div class="contact-list">
+                <div class="contact-card">
+                    <div class="name">Chase Dwyer</div>
+                    <div class="role">CEO & Founder</div>
+                    <div class="info">Forbes 30 Under 30. Background: search fund accelerator, private equity (Graham Partners)</div>
                 </div>
-
-                <div class="info-block">
-                    <strong>Strategy:</strong>
-                    <p>Invest time upfront to build smart tools → massive time savings on backend. Most VCs now ask portfolio companies to build internal AI tools.</p>
+                <div class="contact-card">
+                    <div class="name">Phoebe Van Duinen</div>
+                    <div class="role">Strategic Operations Lead (Your Manager)</div>
+                    <div class="info">VC/Banking background. Climate tech, healthcare, education. Phone: +1 (508) 455-7536</div>
                 </div>
+                <div class="contact-card">
+                    <div class="name">Christian Amtzen</div>
+                    <div class="role">Commercial Lead</div>
+                    <div class="info">Shipbroking, shipping trade & finance background</div>
+                </div>
+                <div class="contact-card">
+                    <div class="name">Daniella Lara</div>
+                    <div class="role">Operations Manager</div>
+                    <div class="info">C: 832-933-8459 | dlara@carbonridge.net</div>
+                </div>
+            </div>
 
-                <div class="info-block">
-                    <strong>What to track:</strong>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Office Address</h3>
+            <div class="info-item">
+                <p>575 5th Ave, Floor 17, Office 128<br>
+                New York, NY 10017<br>
+                <span style="color: #999;">Main office location</span></p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- AI x FINANCE -->
+        <section id="section-aix">
+            <h2>AI × Finance Ideas</h2>
+
+            <div class="info-item">
+                <strong>How Carbon Ridge Uses AI</strong>
+                <p>Custom internal tools that save massive time. Example: Sourcing engine built custom tools → sourced 3,000+ acquisition targets in weeks (vs. manual months).</p>
+            </div>
+
+            <div class="info-grid" style="margin-top: 16px;">
+                <div class="info-item">
+                    <strong>Strategy</strong>
+                    <p>Invest time upfront to build smart tools → massive time savings on backend. VCs now ask portfolio companies to build internal AI tools.</p>
+                </div>
+                <div class="info-item">
+                    <strong>What to Track</strong>
                     <p>• How Carbon Ridge uses AI internally<br>
                        • Which processes are automated<br>
                        • ROI on AI tool development<br>
-                       • How they measure AI impact</p>
+                       • AI impact measurement</p>
                 </div>
+            </div>
 
-                <h3>Financial Analysis Skills</h3>
-                <div class="info-block">
-                    <strong>Project modeling:</strong>
-                    <p>Understanding system sizing based on ship constraints and costs. Unit economics analysis.</p>
+            <h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Skills to Develop</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Project Modeling</strong>
+                    <p>System sizing based on ship constraints and costs. Unit economics analysis.</p>
                 </div>
-
-                <div class="info-block">
-                    <strong>Client-facing presentations:</strong>
+                <div class="info-item">
+                    <strong>Presentations</strong>
                     <p>Investment memos, financial models, CIM analysis. Technical + financial storytelling.</p>
                 </div>
-
-                <div class="info-block">
-                    <strong>Growth thesis:</strong>
-                    <p>Post-transaction analysis. How to position growth for prospects.</p>
-                </div>
-
-                <h3>Questions to Explore</h3>
-                <div class="info-block">
-                    <p>• How do you balance AI tool time investment vs. immediate work?<br>
-                       • What's the ROI measurement framework?<br>
-                       • How do AI tools integrate with human decision-making?<br>
-                       • What's the competitive advantage?</p>
-                </div>
             </div>
+        </section>
 
-            <!-- NETWORKING SECTION -->
-            <div class="card" id="section-networking">
-                <h2>🤝 Networking & Contacts</h2>
+        <div class="section-divider"></div>
 
-                <h3>Carbon Ridge Team</h3>
-                <div class="contact-item">
-                    <div>
-                        <div class="contact-name">Chase Dwyer</div>
-                        <div class="contact-role">CEO & Founder</div>
-                        <div class="contact-info">Forbes 30U30, Forbes 30 Under 30</div>
-                    </div>
-                </div>
-
-                <div class="contact-item">
-                    <div>
-                        <div class="contact-name">Phoebe Van Duinen</div>
-                        <div class="contact-role">Strategic Operations Lead</div>
-                        <div class="contact-info">VC/Banking background (climate tech, healthcare). Your manager.</div>
-                    </div>
-                </div>
-
-                <div class="contact-item">
-                    <div>
-                        <div class="contact-name">Christian Amtzen</div>
-                        <div class="contact-role">Commercial Lead</div>
-                        <div class="contact-info">Shipbroking, shipping trade & finance background</div>
-                    </div>
-                </div>
-
-                <div class="contact-item">
-                    <div>
-                        <div class="contact-name">Daniella Lara</div>
-                        <div class="contact-role">Operations Manager</div>
-                        <div class="contact-info">C: 832-933-8459 | dlara@carbonridge.net</div>
-                    </div>
-                </div>
-
-                <h3>Key Contact Info</h3>
-                <div class="info-block">
-                    <strong>Corporate Email:</strong>
-                    <p>Your email: anya.ganger@wharton.upenn.edu<br>
-                    (You'll get a Carbon Ridge email)</p>
-                </div>
-
-                <div class="info-block">
-                    <strong>Phone:</strong>
-                    <p>+1 (508) 455-7536 (Phoebe)</p>
-                </div>
-
-                <div class="info-block">
-                    <strong>Office Address:</strong>
-                    <p>575 5th Ave, Floor 17, Office 128<br>
-                    New York, NY 10017</p>
-                </div>
-
-                <h3>Connection Strategy</h3>
-                <div class="info-block">
-                    <p><strong>Alignment to mention:</strong><br>
-                    • Search fund experience (you screened companies; Chase sourced 15k)<br>
-                    • Financial analysis background<br>
-                    • Interest in startups & climate tech<br>
-                    • Wharton connection<br>
-                    • Founder-first mentality</p>
-                </div>
+        <!-- DAILY NOTES -->
+        <section>
+            <h2>Daily Notes</h2>
+            <textarea id="dailyNotes" placeholder="June 8: First day in-office...&#10;June 9: Sat in on investor call..."></textarea>
+            <div class="button-group">
+                <button onclick="saveDailyNotes()">Save</button>
+                <button class="secondary" onclick="clearDailyNotes()">Clear</button>
             </div>
+            <div id="notesPreview" class="hint"></div>
+        </section>
 
-            <!-- DAILY NOTES SECTION -->
-            <div class="card">
-                <h2>📝 Daily Notes</h2>
-                <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Keep track of daily learnings, observations, and key takeaways.</p>
-                <textarea id="dailyNotes" placeholder="June 8: First day in-office. Met the team, got laptop setup...&#10;&#10;June 9: Sat in on investor call, learned about Series A..."></textarea>
-                <div class="button-group">
-                    <button class="btn btn-primary" onclick="saveDailyNotes()">Save Notes</button>
-                    <button class="btn btn-secondary" onclick="clearDailyNotes()">Clear</button>
-                </div>
-                <div class="note-preview" id="notesPreview"></div>
-                <p style="color: #999; font-size: 0.85em;">Auto-saved to browser</p>
+        <div class="section-divider"></div>
+
+        <!-- QUESTIONS -->
+        <section>
+            <h2>Questions to Ask</h2>
+            <div class="input-group">
+                <input type="text" id="questionInput" placeholder="What's your vision for maritime decarbonization?">
+                <button onclick="addQuestion()">Add</button>
             </div>
+            <div id="questionsList"></div>
+        </section>
 
-            <!-- QUESTIONS SECTION -->
-            <div class="card">
-                <h2>❓ Questions to Ask</h2>
-                <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Build your list of questions for 1:1s and team meetings.</p>
-                <input type="text" id="questionInput" placeholder="What's your vision for maritime decarbonization?" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 10px;">
-                <button class="btn btn-primary" onclick="addQuestion()" style="margin-bottom: 15px;">Add Question</button>
-                <div id="questionsList"></div>
+        <div class="section-divider"></div>
+
+        <!-- GOALS -->
+        <section>
+            <h2>Summer Goals</h2>
+            <div class="input-group">
+                <input type="text" id="goalInput" placeholder="Learn how startups scale...">
+                <button onclick="addGoal()">Add</button>
             </div>
+            <div id="goalsList"></div>
+        </section>
 
-            <!-- SUMMER GOALS SECTION -->
-            <div class="card">
-                <h2>🎯 Summer Goals</h2>
-                <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Track progress on what you want to achieve this summer.</p>
-                <input type="text" id="goalInput" placeholder="Learn how startups scale..." style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 10px;">
-                <button class="btn btn-primary" onclick="addGoal()" style="margin-bottom: 15px;">Add Goal</button>
-                <div id="goalsList"></div>
-            </div>
-        </div>
+        <div class="section-divider"></div>
 
-        <!-- TIMELINE SECTION -->
-        <div class="card" style="margin-bottom: 40px;">
-            <h2>📅 Summer Timeline</h2>
+        <!-- TIMELINE -->
+        <section>
+            <h2>Timeline</h2>
             <div class="timeline">
                 <div class="timeline-item">
-                    <div class="timeline-marker">1</div>
-                    <div class="timeline-content">
-                        <strong>Week 1-2: Onboarding & Learning (Jun 4-14)</strong>
-                        <p>Remote onboarding Jun 4-7. In-office start Jun 8. Focus: Team intro, company deep-dive, maritime fundamentals, get up to speed on current projects.</p>
-                    </div>
+                    <strong>Week 1-2: Onboarding (Jun 4-14)</strong>
+                    <p>Remote onboarding Jun 4-7. In-office start Jun 8. Focus: Team intro, company deep-dive, maritime fundamentals.</p>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-marker">2</div>
-                    <div class="timeline-content">
-                        <strong>Week 2-5: Early Projects (Jun 15-Jul 12)</strong>
-                        <p>Market research, competitive analysis, support evaluation of partnerships and commercial opportunities. Build client-facing presentations.</p>
-                    </div>
+                    <strong>Week 2-5: Early Projects (Jun 15-Jul 12)</strong>
+                    <p>Market research, competitive analysis, evaluate partnerships and commercial opportunities. Build presentations.</p>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-marker">3</div>
-                    <div class="timeline-content">
-                        <strong>Week 6-9: Main Initiatives (Jul 13-Aug 9)</strong>
-                        <p>Investor communications, go-to-market initiatives, events, brand positioning. More autonomy on projects. Deeper involvement in strategy.</p>
-                    </div>
+                    <strong>Week 6-9: Main Initiatives (Jul 13-Aug 9)</strong>
+                    <p>Investor communications, go-to-market initiatives, events, brand positioning. More autonomy and strategic involvement.</p>
                 </div>
                 <div class="timeline-item">
-                    <div class="timeline-marker">4</div>
-                    <div class="timeline-content">
-                        <strong>Week 10: Wind Down (Aug 10-14)</strong>
-                        <p>Documentation, knowledge transfer, final presentations. Reflection on learnings. Plan next steps.</p>
-                    </div>
+                    <strong>Week 10: Wind Down (Aug 10-14)</strong>
+                    <p>Documentation, knowledge transfer, final presentations. Reflection on learnings and next steps.</p>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <script>
-        // Load data from localStorage
         function loadData() {
             const dailyNotes = localStorage.getItem('dailyNotes') || '';
             const questions = JSON.parse(localStorage.getItem('questions') || '[]');
@@ -725,39 +662,33 @@
 
             document.getElementById('dailyNotes').value = dailyNotes;
             if (dailyNotes) {
-                document.getElementById('notesPreview').textContent = dailyNotes.substring(0, 150) + '...';
+                document.getElementById('notesPreview').textContent = dailyNotes.substring(0, 80) + (dailyNotes.length > 80 ? '...' : '');
             }
 
             renderQuestions(questions);
             renderGoals(goals);
         }
 
-        // Save daily notes
         function saveDailyNotes() {
             const notes = document.getElementById('dailyNotes').value;
             localStorage.setItem('dailyNotes', notes);
-            const preview = notes.substring(0, 150) + (notes.length > 150 ? '...' : '');
-            document.getElementById('notesPreview').textContent = preview || 'No notes yet. Start typing!';
-            alert('Notes saved! ✓');
+            const preview = notes.substring(0, 80) + (notes.length > 80 ? '...' : '');
+            document.getElementById('notesPreview').textContent = preview || 'Notes saved';
         }
 
         function clearDailyNotes() {
-            if (confirm('Are you sure? This will clear all notes.')) {
+            if (confirm('Clear all notes?')) {
                 document.getElementById('dailyNotes').value = '';
                 localStorage.removeItem('dailyNotes');
                 document.getElementById('notesPreview').textContent = '';
             }
         }
 
-        // Questions functionality
         function addQuestion() {
             const input = document.getElementById('questionInput');
             const question = input.value.trim();
 
-            if (!question) {
-                alert('Please enter a question!');
-                return;
-            }
+            if (!question) return;
 
             const questions = JSON.parse(localStorage.getItem('questions') || '[]');
             questions.push({
@@ -777,24 +708,6 @@
             renderQuestions(filtered);
         }
 
-        function renderQuestions(questions) {
-            const list = document.getElementById('questionsList');
-            if (questions.length === 0) {
-                list.innerHTML = '<p style="color: #999; font-style: italic;">No questions yet. Add one above!</p>';
-                return;
-            }
-
-            list.innerHTML = questions.map(q => `
-                <div class="question-item">
-                    <div class="question-text">
-                        <input type="checkbox" ${q.asked ? 'checked' : ''} onchange="toggleQuestion(${q.id})">
-                        <span style="margin-left: 8px; ${q.asked ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${q.text}</span>
-                    </div>
-                    <button class="remove-btn" onclick="removeQuestion(${q.id})">Remove</button>
-                </div>
-            `).join('');
-        }
-
         function toggleQuestion(id) {
             const questions = JSON.parse(localStorage.getItem('questions') || '[]');
             const q = questions.find(x => x.id === id);
@@ -803,15 +716,27 @@
             renderQuestions(questions);
         }
 
-        // Goals functionality
+        function renderQuestions(questions) {
+            const list = document.getElementById('questionsList');
+            if (questions.length === 0) {
+                list.innerHTML = '<div class="empty-state">No questions yet</div>';
+                return;
+            }
+
+            list.innerHTML = questions.map(q => `
+                <div class="list-item ${q.asked ? 'completed' : ''}">
+                    <input type="checkbox" ${q.asked ? 'checked' : ''} onchange="toggleQuestion(${q.id})">
+                    <div class="text">${q.text}</div>
+                    <button onclick="removeQuestion(${q.id})">Remove</button>
+                </div>
+            `).join('');
+        }
+
         function addGoal() {
             const input = document.getElementById('goalInput');
             const goal = input.value.trim();
 
-            if (!goal) {
-                alert('Please enter a goal!');
-                return;
-            }
+            if (!goal) return;
 
             const goals = JSON.parse(localStorage.getItem('goals') || '[]');
             goals.push({
@@ -842,49 +767,45 @@
         function renderGoals(goals) {
             const list = document.getElementById('goalsList');
             if (goals.length === 0) {
-                list.innerHTML = '<p style="color: #999; font-style: italic;">No goals yet. Add one above!</p>';
+                list.innerHTML = '<div class="empty-state">No goals yet</div>';
                 return;
             }
 
             list.innerHTML = goals.map(g => `
-                <div class="goal-item ${g.completed ? 'completed' : ''}">
-                    <div style="display: flex; align-items: center; flex: 1;">
-                        <input type="checkbox" class="goal-checkbox" ${g.completed ? 'checked' : ''} onchange="toggleGoal(${g.id})">
-                        <span style="margin-left: 10px;">${g.text}</span>
-                    </div>
-                    <button class="remove-btn" onclick="removeGoal(${g.id})">Remove</button>
+                <div class="list-item ${g.completed ? 'completed' : ''}">
+                    <input type="checkbox" ${g.completed ? 'checked' : ''} onchange="toggleGoal(${g.id})">
+                    <div class="text">${g.text}</div>
+                    <button onclick="removeGoal(${g.id})">Remove</button>
                 </div>
             `).join('');
         }
 
-        // Search functionality
         function globalSearch() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             if (!searchTerm) return;
 
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                const content = card.textContent.toLowerCase();
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
                 if (content.includes(searchTerm)) {
-                    card.style.display = '';
-                    // Highlight matching text
-                    card.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.5)';
+                    section.style.display = '';
+                    section.style.backgroundColor = '#fffacd';
+                    setTimeout(() => section.style.backgroundColor = '', 2000);
                 } else {
-                    card.style.display = 'none';
+                    section.style.display = 'none';
                 }
             });
         }
 
         function clearSearch() {
             document.getElementById('searchInput').value = '';
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.style.display = '';
-                card.style.boxShadow = '';
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.style.display = '';
+                section.style.backgroundColor = '';
             });
         }
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
