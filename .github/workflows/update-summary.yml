@@ -8,46 +8,117 @@ on:
 jobs:
   update-summary:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+ 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
  
-      - name: Generate shipping summary with Claude
-        id: generate
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+ 
+      - name: Install dependencies
+        run: npm install @anthropic-ai/sdk
+ 
+      - name: Generate and update summary
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          curl -X POST https://api.anthropic.com/v1/messages \
-            -H "x-api-key: $ANTHROPIC_API_KEY" \
-            -H "anthropic-version: 2023-06-01" \
-            -H "content-type: application/json" \
-            -d '{
-              "model": "claude-opus-4-6",
-              "max_tokens": 1500,
-              "messages": [
+          node << 'EOF'
+          const Anthropic = require("@anthropic-ai/sdk");
+          const fs = require("fs");
+ 
+          const client = new Anthropic();
+ 
+          async function main() {
+            const today = new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric"
+            });
+ 
+            const message = await client.messages.create({
+              model: "claude-opus-4-6",
+              max_tokens: 1500,
+              messages: [
                 {
-                  "role": "user",
-                  "content": "Search for the latest shipping industry news, maritime decarbonization trends, and regulatory developments. Focus on: 1) Recent regulatory changes (EU ETS, IMO updates, FuelEU Maritime), 2) Alternative fuel developments (methanol, ammonia, hydrogen), 3) New maritime tech innovations, 4) Ship owner adoption trends, 5) Major shipping industry news. Generate a concise 15-minute read summary for today. Format as HTML with these sections: The Big Picture, Regulatory Tailwinds, Market Dynamics, Alternative Fuels & Technology, and What to Watch. Make it relevant to maritime decarbonization/shipping optimization. Today's date: '$(date +%Y-%m-%d)'"
+                  role: "user",
+                  content: `Generate a shipping industry summary for ${today}. Search for latest news on:
+1. Regulatory changes (EU ETS, IMO, FuelEU Maritime)
+2. Alternative fuels (methanol, ammonia, hydrogen)
+3. Maritime tech innovations
+4. Ship owner adoption trends
+5. Major shipping industry developments
+ 
+Create a 15-minute read summary with these HTML sections (use the exact format):
+ 
+<h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Industry Summary (15-min read) - Updated ${today}</h3>
+ 
+<div class="info-item">
+<strong>The Big Picture</strong>
+<p>[paragraph about current shipping landscape and regulations]</p>
+</div>
+ 
+<div class="info-item" style="margin-top: 12px;">
+<strong>Regulatory Tailwinds</strong>
+<p>[bullet points on regulations]</p>
+</div>
+ 
+<div class="info-item" style="margin-top: 12px;">
+<strong>Market Dynamics</strong>
+<p>[bullet points on market trends]</p>
+</div>
+ 
+<div class="info-item" style="margin-top: 12px;">
+<strong>Alternative Fuels & Technology</strong>
+<p>[bullet points on latest developments]</p>
+</div>
+ 
+<div class="info-item" style="margin-top: 12px;">
+<strong>What to Watch</strong>
+<p>[key focus areas for shipping industry]</p>
+</div>
+ 
+Make it relevant to maritime decarbonization and shipping optimization.`
                 }
               ]
-            }' > response.json
+            });
  
-          cat response.json
-          echo "SUMMARY_RESPONSE=$(cat response.json)" >> $GITHUB_ENV
+            const summary = message.content[0].text;
+            console.log("Generated summary:", summary);
  
-      - name: Update HTML file
-        run: |
-          # For now, just verify the file exists
-          if [ -f "internship-hq.html" ]; then
-            echo "File found, ready for update"
-            # You'll need to parse the response and update manually
-            # For this initial test, we'll just verify the API call works
-          fi
+            // Read the HTML file
+            let html = fs.readFileSync("internship-hq.html", "utf-8");
  
-      - name: Commit and push changes
+            // Find and replace the industry summary section
+            const summaryRegex = /<h3 style="font-size: 0\.95em; font-weight: 600; margin-bottom: 12px; color: #666;">Industry Summary[\s\S]*?<\/div>\s*<\/div>\s*<h3 style="font-size: 0\.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Key Concepts/;
+ 
+            if (summaryRegex.test(html)) {
+              html = html.replace(
+                summaryRegex,
+                summary + '\n\n<h3 style="font-size: 0.95em; font-weight: 600; margin-bottom: 12px; color: #666; margin-top: 20px;">Key Concepts'
+              );
+              fs.writeFileSync("internship-hq.html", html);
+              console.log("Summary updated successfully");
+            } else {
+              console.log("Could not find summary section to replace");
+              process.exit(1);
+            }
+          }
+ 
+          main().catch((error) => {
+            console.error("Error:", error);
+            process.exit(1);
+          });
+          EOF
+ 
+      - name: Commit and push
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action Bot"
-          git add -A || true
-          git commit -m "chore: shipping summary update - $(date +'%Y-%m-%d')" || echo "No changes to commit"
-          git push || echo "Nothing to push"
+          git config --local user.name "Shipping Summary Bot"
+          git add internship-hq.html
+          git commit -m "chore: update shipping industry summary - $(date +'%Y-%m-%d %H:%M')" || echo "No changes"
+          git push
