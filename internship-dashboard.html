@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Internship HQ</title>
+<style>
+  /* ============================================================
+     Black & white, minimal. Mobile first.
+     ============================================================ */
+  :root {
+    --bg: #ffffff;
+    --fg: #0a0a0a;
+    --muted: #6b6b6b;
+    --line: #e5e5e5;
+    --line-strong: #0a0a0a;
+    --accent: #0a0a0a;
+    --soft: #f6f6f6;
+    --radius: 4px;
+    --max: 880px;
+    --serif: ui-serif, "Iowan Old Style", "Apple Garamond", Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); }
+  body {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  /* ---------- Passcode gate ---------- */
+  #gate {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  #gate .card {
+    width: 100%; max-width: 360px;
+    border: 1px solid var(--line-strong);
+    padding: 28px 24px;
+  }
+  #gate h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0 0 4px;
+  }
+  #gate p { color: var(--muted); margin: 0 0 20px; font-size: 13px; }
+  #gate input {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid var(--line-strong);
+    background: var(--bg); color: var(--fg);
+    font: inherit; border-radius: 0;
+  }
+  #gate input:focus { outline: 2px solid var(--fg); outline-offset: -1px; }
+  #gate button {
+    width: 100%; margin-top: 10px; padding: 10px 12px;
+    background: var(--fg); color: var(--bg);
+    border: 1px solid var(--fg);
+  }
+  #gate .err { color: #a00; font-size: 12px; margin-top: 10px; min-height: 1em; }
+
+  /* ---------- App shell ---------- */
+  #app { display: none; }
+  header.topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 20px;
+  }
+  .topbar-row {
+    max-width: var(--max); margin: 0 auto;
+    display: flex; align-items: baseline; gap: 16px;
+    justify-content: space-between;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-size: 20px; font-weight: 500; letter-spacing: -0.01em;
+  }
+  .brand small {
+    font-family: var(--sans);
+    font-size: 12px; color: var(--muted); margin-left: 8px;
+    letter-spacing: 0.02em; text-transform: uppercase;
+  }
+  .top-actions { display: flex; gap: 6px; }
+  .icon-btn {
+    background: transparent; border: 1px solid var(--line);
+    padding: 6px 10px; font-size: 12px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .icon-btn:hover { border-color: var(--fg); }
+  .icon-btn.dot::before {
+    content: ""; display: inline-block; width: 6px; height: 6px;
+    background: var(--fg); border-radius: 50%; margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* ---------- Tab nav ---------- */
+  nav.tabs {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    position: sticky; top: 52px; z-index: 40;
+  }
+  .tabs-row {
+    max-width: var(--max); margin: 0 auto;
+    display: flex; gap: 4px; overflow-x: auto;
+    padding: 0 16px;
+    scrollbar-width: none;
+  }
+  .tabs-row::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: transparent; border: 0;
+    padding: 12px 10px; font-size: 13px;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+  .tab-btn:hover { color: var(--fg); }
+  .tab-btn.active {
+    color: var(--fg);
+    border-bottom-color: var(--fg);
+    font-weight: 500;
+  }
+
+  /* ---------- Main ---------- */
+  main {
+    max-width: var(--max); margin: 0 auto;
+    padding: 20px 20px 120px;
+  }
+
+  /* ---------- Briefing card ---------- */
+  .briefing {
+    border: 1px solid var(--line-strong);
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .briefing header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .briefing .label {
+    font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .briefing .date { font-size: 11px; color: var(--muted); }
+  .briefing-body {
+    font-size: 14px; line-height: 1.6;
+  }
+  .briefing-body h1, .briefing-body h2, .briefing-body h3 {
+    font-family: var(--serif); font-weight: 500;
+    margin: 12px 0 4px;
+  }
+  .briefing-body h2 { font-size: 16px; }
+  .briefing-body h3 { font-size: 14px; }
+  .briefing-body p { margin: 6px 0; }
+  .briefing-body ul { padding-left: 18px; margin: 6px 0; }
+  .briefing-empty { color: var(--muted); font-size: 13px; }
+
+  /* ---------- Tab content ---------- */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .panel-head h2 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 26px; letter-spacing: -0.01em; margin: 0;
+  }
+  .panel-head .meta {
+    font-size: 12px; color: var(--muted);
+  }
+  .toggle-edit {
+    background: transparent; border: 1px solid var(--line);
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 5px 10px;
+  }
+  .toggle-edit:hover { border-color: var(--fg); }
+  .editor {
+    width: 100%; min-height: 320px;
+    background: var(--bg); color: var(--fg);
+    border: 1px solid var(--line);
+    padding: 14px 16px;
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    resize: vertical; border-radius: 0;
+  }
+  .editor:focus { outline: none; border-color: var(--fg); }
+  .render {
+    min-height: 200px; font-size: 15px; line-height: 1.65;
+  }
+  .render h1, .render h2, .render h3, .render h4 {
+    font-family: var(--serif); font-weight: 500;
+    letter-spacing: -0.005em;
+    margin: 20px 0 6px;
+  }
+  .render h1 { font-size: 22px; }
+  .render h2 { font-size: 19px; }
+  .render h3 { font-size: 16px; }
+  .render p { margin: 8px 0; }
+  .render ul, .render ol { padding-left: 22px; margin: 8px 0; }
+  .render li { margin: 4px 0; }
+  .render code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--soft); padding: 1px 5px;
+  }
+  .render hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+  .render a { text-decoration: underline; text-underline-offset: 2px; }
+  .render blockquote {
+    border-left: 2px solid var(--fg); margin: 10px 0;
+    padding: 2px 0 2px 12px; color: var(--muted);
+  }
+  .empty-hint {
+    color: var(--muted); font-size: 13px; font-style: italic;
+    padding: 30px 0;
+  }
+
+  .save-status {
+    font-size: 11px; letter-spacing: 0.05em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .save-status.saving { color: var(--muted); }
+  .save-status.saved { color: var(--fg); }
+  .save-status.err { color: #a00; }
+
+  /* ---------- Documents drawer ---------- */
+  #docs-drawer, #chat-drawer {
+    position: fixed; top: 0; right: 0; height: 100vh;
+    width: min(440px, 100vw);
+    background: var(--bg);
+    border-left: 1px solid var(--line-strong);
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    z-index: 100;
+    display: flex; flex-direction: column;
+  }
+  #docs-drawer.open, #chat-drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 16px 20px; border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .drawer-head h3 {
+    margin: 0; font-family: var(--serif); font-weight: 500;
+    font-size: 18px;
+  }
+  .drawer-body {
+    flex: 1; overflow-y: auto; padding: 16px 20px;
+  }
+  .doc-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .doc-row .meta { color: var(--muted); font-size: 11px; }
+  .doc-row button {
+    background: transparent; border: 1px solid var(--line);
+    font-size: 11px; padding: 3px 8px; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .doc-row button:hover { border-color: var(--fg); }
+  .upload-zone {
+    border: 1px dashed var(--line-strong);
+    padding: 18px; text-align: center;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 16px; cursor: pointer;
+  }
+  .upload-zone:hover { background: var(--soft); }
+  .upload-zone.drag { background: var(--soft); }
+  .upload-zone strong { color: var(--fg); display: block; font-size: 14px; margin-bottom: 4px; }
+  #file-input { display: none; }
+
+  /* ---------- Chat drawer ---------- */
+  #chat-drawer .messages {
+    flex: 1; overflow-y: auto; padding: 16px 20px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .msg { font-size: 14px; line-height: 1.55; }
+  .msg .who {
+    font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .msg.user .body {
+    background: var(--soft); padding: 10px 12px;
+  }
+  .msg.assistant .body {
+    border-left: 2px solid var(--fg);
+    padding: 4px 0 4px 12px;
+  }
+  .msg .body h1, .msg .body h2, .msg .body h3 {
+    font-family: var(--serif); font-weight: 500; margin: 8px 0 4px;
+    font-size: 15px;
+  }
+  .msg .body p { margin: 6px 0; }
+  .msg .body ul, .msg .body ol { padding-left: 20px; margin: 6px 0; }
+  .chat-input-row {
+    border-top: 1px solid var(--line);
+    padding: 12px 20px;
+    display: flex; gap: 8px;
+  }
+  .chat-input-row textarea {
+    flex: 1; border: 1px solid var(--line);
+    padding: 8px 10px; font: inherit; font-size: 14px;
+    resize: none; border-radius: 0; min-height: 38px; max-height: 120px;
+  }
+  .chat-input-row textarea:focus { outline: none; border-color: var(--fg); }
+  .chat-input-row button {
+    background: var(--fg); color: var(--bg);
+    border: 1px solid var(--fg);
+    padding: 0 16px; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .chat-input-row button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .chat-thinking {
+    color: var(--muted); font-style: italic; font-size: 13px;
+  }
+  .chat-empty {
+    color: var(--muted); font-size: 13px; text-align: center;
+    padding: 40px 20px;
+  }
+  .chat-empty .suggestions {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-top: 16px;
+  }
+  .chat-empty .suggestions button {
+    background: transparent; border: 1px solid var(--line);
+    padding: 8px 10px; font-size: 12px;
+    text-align: left; color: var(--fg);
+  }
+  .chat-empty .suggestions button:hover { border-color: var(--fg); }
+
+  /* Floating chat button */
+  #chat-fab {
+    position: fixed; bottom: 20px; right: 20px; z-index: 60;
+    background: var(--fg); color: var(--bg);
+    border: 1px solid var(--fg);
+    padding: 12px 18px;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+  #chat-fab:hover { background: #1a1a1a; }
+
+  /* Backdrop */
+  #backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.2);
+    z-index: 90; display: none;
+  }
+  #backdrop.show { display: block; }
+
+  @media (max-width: 600px) {
+    .topbar-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .top-actions { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+    nav.tabs { top: 96px; }
+    .panel-head h2 { font-size: 22px; }
+    #chat-fab { bottom: 14px; right: 14px; padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     Passcode gate
+     ========================================================= -->
+<div id="gate">
+  <div class="card">
+    <h1>Internship HQ</h1>
+    <p>Enter passcode to continue.</p>
+    <input id="gate-input" type="password" autocomplete="current-password" autofocus />
+    <button id="gate-btn">Enter</button>
+    <div class="err" id="gate-err"></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     App
+     ========================================================= -->
+<div id="app">
+
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        Internship HQ
+        <small id="brand-sub">Carbon Ridge · Summer 2026</small>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="open-docs">Documents <span id="doc-count"></span></button>
+        <button class="icon-btn" id="lock-btn">Lock</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="tabs-row" id="tab-nav"></div>
+  </nav>
+
+  <main>
+    <!-- Tab panels are injected here. The Briefing tab is one of them. -->
+    <div id="panels"></div>
+  </main>
+
+  <!-- Floating chat button -->
+  <button id="chat-fab">Ask Claude</button>
+
+  <!-- Documents drawer -->
+  <aside id="docs-drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <h3>Documents</h3>
+      <button class="icon-btn" data-close-drawer>Close</button>
+    </div>
+    <div class="drawer-body">
+      <label class="upload-zone" id="upload-zone" for="file-input">
+        <strong>Upload a PDF</strong>
+        Drop a file here or click to choose. Claude will read it.
+      </label>
+      <input type="file" id="file-input" accept="application/pdf,.pdf" multiple />
+      <div id="doc-list"></div>
+    </div>
+  </aside>
+
+  <!-- Chat drawer -->
+  <aside id="chat-drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <h3>Ask Claude</h3>
+      <div style="display:flex; gap:6px;">
+        <button class="icon-btn" id="chat-clear">Clear</button>
+        <button class="icon-btn" data-close-drawer>Close</button>
+      </div>
+    </div>
+    <div class="messages" id="chat-messages">
+      <div class="chat-empty" id="chat-empty">
+        <div>Claude can answer questions using your dashboard content and uploaded documents.</div>
+        <div class="suggestions">
+          <button data-suggest="What are my responsibilities at Carbon Ridge?">What are my responsibilities at Carbon Ridge?</button>
+          <button data-suggest="Summarize what I've learned about maritime decarbonization.">Summarize what I've learned about maritime decarbonization.</button>
+          <button data-suggest="What should I ask my mentor this week?">What should I ask my mentor this week?</button>
+          <button data-suggest="What are the top news stories I should know about today?">What are the top news stories I should know about today?</button>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <textarea id="chat-input" rows="1" placeholder="Ask anything…"></textarea>
+      <button id="chat-send">Send</button>
+    </div>
+  </aside>
+
+  <div id="backdrop"></div>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { marked } from "https://cdn.jsdelivr.net/npm/marked@12/+esm";
+import DOMPurify from "https://cdn.jsdelivr.net/npm/dompurify@3.1.5/dist/purify.es.mjs";
+import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.mjs";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs";
+
+// ============================================================
+// CONFIG  —  edit these two lines (and only these) before deploying.
+// ============================================================
+const SUPABASE_URL  = "https://aergzckebxulgifvyiqw.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlcmd6Y2tlYnh1bGdpZnZ5aXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NTIwMzYsImV4cCI6MjA5NTEyODAzNn0.2hux7iTf03SfxvlvY4J0Z8k02yfkUTL6083SN51w98M";
+
+// Change this to your own passcode. Anyone with the URL who knows this
+// passcode can see / edit your dashboard. The Supabase anon key is also
+// in this file (it has to be, to talk to Supabase from the browser), so
+// this passcode is the only thing between a random visitor and your data.
+const PASSCODE = "anyaganger";
+
+// Name of the edge function deployed to Supabase.
+const CHAT_FN = "claude-chat";
+
+// ============================================================
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const TABS = [
+  { id: "briefing",          title: "Briefing",          type: "briefing" },
+  { id: "carbon-ridge",      title: "Carbon Ridge",      placeholder: "Responsibilities, projects, what I'm learning, logistics…" },
+  { id: "maritime-research", title: "Maritime Research", placeholder: "Industry notes, decarbonization insights, regulatory info…" },
+  { id: "ai-finance",        title: "AI x Finance",      placeholder: "Ideas, opportunities, things to explore…" },
+  { id: "networking",        title: "Networking",        placeholder: "Contacts, conversations, follow-ups…" },
+  { id: "daily-notes",       title: "Daily Notes",       placeholder: "Progress, observations, reflections…" },
+  { id: "questions",         title: "Questions",         placeholder: "Things to ask mentors, managers, peers…" },
+  { id: "summer-goals",      title: "Summer Goals",      placeholder: "Milestones, targets, success metrics…" },
+];
+
+// Tabs whose content the user types and that get persisted.
+const EDITABLE_TABS = TABS.filter((t) => t.type !== "briefing");
+
+const state = {
+  current: TABS[0].id,
+  tabs: {},          // id -> { content, updated_at, mode: 'view'|'edit', dirty: bool }
+  docs: [],          // [{ id, filename, ... }]
+  briefing: null,    // { briefing_date, content }
+  chat: [],          // [{ role, content }]
+};
+
+// ----------------------------------------------------------------
+// Passcode gate
+// ----------------------------------------------------------------
+const GATE_KEY = "internshipHQ.unlocked";
+
+function showGate() {
+  document.getElementById("gate").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("gate-input").focus();
+}
+function hideGate() {
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("app").style.display = "block";
+}
+function tryUnlock(code) {
+  if (code === PASSCODE) {
+    sessionStorage.setItem(GATE_KEY, "1");
+    hideGate();
+    boot();
+    return true;
+  }
+  return false;
+}
+document.getElementById("gate-btn").addEventListener("click", () => {
+  const ok = tryUnlock(document.getElementById("gate-input").value);
+  if (!ok) document.getElementById("gate-err").textContent = "Incorrect passcode.";
+});
+document.getElementById("gate-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") document.getElementById("gate-btn").click();
+});
+document.getElementById("lock-btn").addEventListener("click", () => {
+  sessionStorage.removeItem(GATE_KEY);
+  location.reload();
+});
+
+if (sessionStorage.getItem(GATE_KEY) === "1") {
+  hideGate();
+  boot();
+} else {
+  showGate();
+}
+
+// ----------------------------------------------------------------
+// Boot
+// ----------------------------------------------------------------
+async function boot() {
+  renderTabNav();
+  renderPanelsScaffold();
+  bindUI();
+  await Promise.all([
+    loadTabs(),
+    loadDocuments(),
+    loadBriefing(),
+    loadChatHistory(),
+  ]);
+  setCurrentTab(state.current);
+  renderBriefing();
+  renderDocList();
+  renderChat();
+}
+
+// ----------------------------------------------------------------
+// Tab rendering
+// ----------------------------------------------------------------
+function renderTabNav() {
+  const nav = document.getElementById("tab-nav");
+  nav.innerHTML = "";
+  for (const t of TABS) {
+    const b = document.createElement("button");
+    b.className = "tab-btn";
+    b.dataset.tab = t.id;
+    b.textContent = t.title;
+    b.addEventListener("click", () => setCurrentTab(t.id));
+    nav.appendChild(b);
+  }
+}
+
+function renderPanelsScaffold() {
+  const container = document.getElementById("panels");
+  container.innerHTML = "";
+  for (const t of TABS) {
+    const sec = document.createElement("section");
+    sec.className = "panel";
+    sec.dataset.tab = t.id;
+
+    if (t.type === "briefing") {
+      // Read-only panel that shows the latest scheduled briefing.
+      sec.innerHTML = `
+        <div class="panel-head">
+          <h2>Briefing</h2>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span class="date" id="briefing-date"></span>
+            <button class="toggle-edit" id="briefing-refresh-btn">Refresh</button>
+          </div>
+        </div>
+        <div class="briefing" style="margin: 0;">
+          <div class="briefing-body" id="briefing-body">
+            <div class="briefing-empty">No briefing yet. Your scheduled task writes one each weekday at 12:01am.</div>
+          </div>
+        </div>
+      `;
+      container.appendChild(sec);
+      sec.querySelector("#briefing-refresh-btn").addEventListener("click", async () => {
+        await loadBriefing();
+        renderBriefing();
+      });
+      continue;
+    }
+
+    sec.innerHTML = `
+      <div class="panel-head">
+        <h2>${t.title}</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="save-status" data-status></span>
+          <button class="toggle-edit" data-toggle>Edit</button>
+        </div>
+      </div>
+      <div class="render" data-render></div>
+      <textarea class="editor" data-editor placeholder="${t.placeholder}" style="display:none;"></textarea>
+    `;
+    container.appendChild(sec);
+
+    const editor = sec.querySelector("[data-editor]");
+    const render = sec.querySelector("[data-render]");
+    const toggle = sec.querySelector("[data-toggle]");
+
+    toggle.addEventListener("click", () => {
+      const editing = editor.style.display !== "none";
+      if (editing) {
+        // switching back to view
+        editor.style.display = "none";
+        render.style.display = "block";
+        toggle.textContent = "Edit";
+        renderTabContent(t.id);
+        flushSave(t.id);
+      } else {
+        editor.style.display = "block";
+        render.style.display = "none";
+        toggle.textContent = "Done";
+        editor.focus();
+      }
+    });
+
+    editor.addEventListener("input", () => {
+      state.tabs[t.id] = state.tabs[t.id] || { content: "" };
+      state.tabs[t.id].content = editor.value;
+      state.tabs[t.id].dirty = true;
+      setStatus(t.id, "saving", "Saving…");
+      debouncedSave(t.id);
+    });
+  }
+}
+
+function setCurrentTab(id) {
+  state.current = id;
+  for (const b of document.querySelectorAll(".tab-btn")) {
+    b.classList.toggle("active", b.dataset.tab === id);
+  }
+  for (const p of document.querySelectorAll(".panel")) {
+    p.classList.toggle("active", p.dataset.tab === id);
+  }
+  renderTabContent(id);
+}
+
+function renderTabContent(id) {
+  // The briefing tab is read-only — renderBriefing handles it.
+  const meta = TABS.find((t) => t.id === id);
+  if (meta?.type === "briefing") return;
+
+  const panel = document.querySelector(`.panel[data-tab="${id}"]`);
+  if (!panel) return;
+  const editor = panel.querySelector("[data-editor]");
+  const render = panel.querySelector("[data-render]");
+  const content = state.tabs[id]?.content || "";
+  editor.value = content;
+  if (content.trim()) {
+    const html = DOMPurify.sanitize(marked.parse(content));
+    render.innerHTML = html;
+  } else {
+    render.innerHTML = `<div class="empty-hint">Click <strong>Edit</strong> to start writing in this tab. Markdown is supported.</div>`;
+  }
+}
+
+function setStatus(id, klass, text) {
+  const panel = document.querySelector(`.panel[data-tab="${id}"]`);
+  if (!panel) return;
+  const el = panel.querySelector("[data-status]");
+  el.className = "save-status " + klass;
+  el.textContent = text;
+}
+
+// ----------------------------------------------------------------
+// Load + save tabs
+// ----------------------------------------------------------------
+async function loadTabs() {
+  const { data, error } = await supabase.from("tabs").select("*");
+  if (error) {
+    console.error("loadTabs", error);
+    return;
+  }
+  for (const row of data || []) {
+    state.tabs[row.id] = { content: row.content || "", updated_at: row.updated_at };
+  }
+  // ensure all 7 tabs exist in state even if DB is empty
+  for (const t of TABS) {
+    if (!state.tabs[t.id]) state.tabs[t.id] = { content: "" };
+  }
+}
+
+const saveTimers = {};
+function debouncedSave(id) {
+  clearTimeout(saveTimers[id]);
+  saveTimers[id] = setTimeout(() => flushSave(id), 800);
+}
+async function flushSave(id) {
+  const tab = state.tabs[id];
+  if (!tab || !tab.dirty) return;
+  setStatus(id, "saving", "Saving…");
+  const meta = TABS.find((t) => t.id === id);
+  const { error } = await supabase
+    .from("tabs")
+    .upsert({ id, title: meta?.title || id, content: tab.content });
+  if (error) {
+    console.error("save", error);
+    setStatus(id, "err", "Save failed");
+  } else {
+    tab.dirty = false;
+    setStatus(id, "saved", "Saved");
+    setTimeout(() => setStatus(id, "", ""), 1200);
+  }
+}
+
+// ----------------------------------------------------------------
+// Documents
+// ----------------------------------------------------------------
+async function loadDocuments() {
+  const { data, error } = await supabase
+    .from("documents")
+    .select("id, filename, byte_size, uploaded_at, extracted_text")
+    .order("uploaded_at", { ascending: false });
+  if (error) {
+    console.error("loadDocuments", error);
+    return;
+  }
+  state.docs = data || [];
+  updateDocCount();
+}
+
+function updateDocCount() {
+  const el = document.getElementById("doc-count");
+  el.textContent = state.docs.length ? `(${state.docs.length})` : "";
+}
+
+function renderDocList() {
+  const list = document.getElementById("doc-list");
+  list.innerHTML = "";
+  if (!state.docs.length) {
+    list.innerHTML = `<div class="empty-hint" style="padding:8px 0;">No documents yet.</div>`;
+    return;
+  }
+  for (const d of state.docs) {
+    const row = document.createElement("div");
+    row.className = "doc-row";
+    const kb = d.byte_size ? Math.round(d.byte_size / 1024) + " KB" : "";
+    const date = d.uploaded_at ? new Date(d.uploaded_at).toLocaleDateString() : "";
+    row.innerHTML = `
+      <div>
+        <div>${escapeHTML(d.filename)}</div>
+        <div class="meta">${kb}${kb && date ? " · " : ""}${date}</div>
+      </div>
+      <button data-del="${d.id}">Delete</button>
+    `;
+    row.querySelector("[data-del]").addEventListener("click", () => deleteDoc(d));
+    list.appendChild(row);
+  }
+}
+
+async function uploadFiles(files) {
+  for (const file of files) {
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      alert(`Skipping ${file.name} — only PDFs are supported.`);
+      continue;
+    }
+    try {
+      const text = await extractPdfText(file);
+      const path = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const up = await supabase.storage.from("documents").upload(path, file, {
+        contentType: "application/pdf",
+      });
+      if (up.error) throw up.error;
+      const ins = await supabase.from("documents").insert({
+        filename: file.name,
+        storage_path: path,
+        extracted_text: text,
+        byte_size: file.size,
+      });
+      if (ins.error) throw ins.error;
+    } catch (e) {
+      console.error(e);
+      alert(`Failed to upload ${file.name}: ${e.message || e}`);
+    }
+  }
+  await loadDocuments();
+  renderDocList();
+}
+
+async function extractPdfText(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  const parts = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    parts.push(content.items.map((it) => it.str).join(" "));
+  }
+  return parts.join("\n\n");
+}
+
+async function deleteDoc(d) {
+  if (!confirm(`Delete ${d.filename}?`)) return;
+  if (d.storage_path) {
+    await supabase.storage.from("documents").remove([d.storage_path]);
+  }
+  await supabase.from("documents").delete().eq("id", d.id);
+  await loadDocuments();
+  renderDocList();
+}
+
+// ----------------------------------------------------------------
+// Briefing
+// ----------------------------------------------------------------
+async function loadBriefing() {
+  const { data, error } = await supabase
+    .from("briefings")
+    .select("*")
+    .order("briefing_date", { ascending: false })
+    .limit(1);
+  if (error) { console.error(error); return; }
+  state.briefing = (data || [])[0] || null;
+}
+
+function renderBriefing() {
+  const dateEl = document.getElementById("briefing-date");
+  const bodyEl = document.getElementById("briefing-body");
+  if (state.briefing) {
+    dateEl.textContent = new Date(state.briefing.briefing_date).toLocaleDateString(undefined, {
+      weekday: "long", month: "short", day: "numeric",
+    });
+    bodyEl.innerHTML = DOMPurify.sanitize(marked.parse(state.briefing.content || ""));
+  } else {
+    dateEl.textContent = "";
+    bodyEl.innerHTML = `<div class="briefing-empty">No briefing yet. Your scheduled task writes one each morning.</div>`;
+  }
+}
+
+// ----------------------------------------------------------------
+// Chat
+// ----------------------------------------------------------------
+async function loadChatHistory() {
+  const { data, error } = await supabase
+    .from("chat_messages")
+    .select("role, content, created_at")
+    .order("created_at", { ascending: true })
+    .limit(50);
+  if (error) { console.error(error); return; }
+  state.chat = data || [];
+}
+
+function renderChat() {
+  const wrap = document.getElementById("chat-messages");
+  const empty = document.getElementById("chat-empty");
+  // remove old messages but keep the empty card
+  wrap.querySelectorAll(".msg, .chat-thinking").forEach((n) => n.remove());
+  if (!state.chat.length) {
+    empty.style.display = "";
+  } else {
+    empty.style.display = "none";
+    for (const m of state.chat) appendMessage(m);
+  }
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function appendMessage(m) {
+  const wrap = document.getElementById("chat-messages");
+  const div = document.createElement("div");
+  div.className = "msg " + m.role;
+  const body = m.role === "assistant"
+    ? DOMPurify.sanitize(marked.parse(m.content || ""))
+    : `<p>${escapeHTML(m.content)}</p>`;
+  div.innerHTML = `<div class="who">${m.role === "user" ? "You" : "Claude"}</div><div class="body">${body}</div>`;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return div;
+}
+
+async function sendChat(text) {
+  text = (text || "").trim();
+  if (!text) return;
+  document.getElementById("chat-empty").style.display = "none";
+  const userMsg = { role: "user", content: text };
+  state.chat.push(userMsg);
+  appendMessage(userMsg);
+  await supabase.from("chat_messages").insert(userMsg);
+
+  // thinking indicator
+  const wrap = document.getElementById("chat-messages");
+  const thinking = document.createElement("div");
+  thinking.className = "chat-thinking";
+  thinking.textContent = "Claude is thinking…";
+  wrap.appendChild(thinking);
+  wrap.scrollTop = wrap.scrollHeight;
+
+  const send = document.getElementById("chat-send");
+  send.disabled = true;
+  try {
+    const system = buildSystemPrompt();
+    // Keep only the last ~20 messages to stay cheap.
+    const history = state.chat.slice(-20).map((m) => ({ role: m.role, content: m.content }));
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/${CHAT_FN}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${SUPABASE_ANON}`,
+      },
+      body: JSON.stringify({ system, messages: history }),
+    });
+    const data = await res.json();
+    thinking.remove();
+
+    if (!res.ok) {
+      throw new Error(data?.error?.message || data?.error || `HTTP ${res.status}`);
+    }
+    const reply = (data?.content || [])
+      .filter((c) => c.type === "text")
+      .map((c) => c.text)
+      .join("\n") || "(no reply)";
+    const asst = { role: "assistant", content: reply };
+    state.chat.push(asst);
+    appendMessage(asst);
+    await supabase.from("chat_messages").insert(asst);
+  } catch (e) {
+    thinking.remove();
+    const err = { role: "assistant", content: `**Error:** ${e.message || e}\n\nIs the \`claude-chat\` edge function deployed and is \`ANTHROPIC_API_KEY\` set?` };
+    state.chat.push(err);
+    appendMessage(err);
+  } finally {
+    send.disabled = false;
+  }
+}
+
+function buildSystemPrompt() {
+  const today = new Date().toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  let s = `You are Anya's internship assistant. She is interning at Carbon Ridge (summer 2026). Today is ${today}.
+
+Answer her questions using only the dashboard content and uploaded documents shown below. Be concise, specific, and reference which tab or document a fact comes from. If something isn't covered, say so plainly instead of guessing.
+
+# DASHBOARD TABS
+`;
+  for (const t of EDITABLE_TABS) {
+    const content = (state.tabs[t.id]?.content || "").trim();
+    s += `\n## ${t.title}\n${content || "(empty)"}\n`;
+  }
+  if (state.briefing) {
+    s += `\n# TODAY'S BRIEFING (${state.briefing.briefing_date})\n${state.briefing.content}\n`;
+  }
+  if (state.docs.length) {
+    s += `\n# UPLOADED DOCUMENTS\n`;
+    // Cap each document at ~6000 chars to keep the prompt reasonable.
+    for (const d of state.docs) {
+      const txt = (d.extracted_text || "").slice(0, 6000);
+      s += `\n## ${d.filename}\n${txt}\n`;
+    }
+  }
+  return s;
+}
+
+// ----------------------------------------------------------------
+// UI wiring
+// ----------------------------------------------------------------
+function bindUI() {
+  // Drawers
+  const backdrop = document.getElementById("backdrop");
+  const docsDrawer = document.getElementById("docs-drawer");
+  const chatDrawer = document.getElementById("chat-drawer");
+
+  function openDrawer(d) {
+    closeDrawers();
+    d.classList.add("open");
+    d.setAttribute("aria-hidden", "false");
+    backdrop.classList.add("show");
+  }
+  function closeDrawers() {
+    docsDrawer.classList.remove("open");
+    chatDrawer.classList.remove("open");
+    docsDrawer.setAttribute("aria-hidden", "true");
+    chatDrawer.setAttribute("aria-hidden", "true");
+    backdrop.classList.remove("show");
+  }
+  document.getElementById("open-docs").addEventListener("click", () => openDrawer(docsDrawer));
+  document.getElementById("chat-fab").addEventListener("click", () => openDrawer(chatDrawer));
+  for (const btn of document.querySelectorAll("[data-close-drawer]")) {
+    btn.addEventListener("click", closeDrawers);
+  }
+  backdrop.addEventListener("click", closeDrawers);
+
+  // File input + drag-drop
+  const fileInput = document.getElementById("file-input");
+  const zone = document.getElementById("upload-zone");
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files?.length) uploadFiles(Array.from(e.target.files));
+    fileInput.value = "";
+  });
+  ["dragenter", "dragover"].forEach((ev) =>
+    zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add("drag"); })
+  );
+  ["dragleave", "drop"].forEach((ev) =>
+    zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.remove("drag"); })
+  );
+  zone.addEventListener("drop", (e) => {
+    const files = Array.from(e.dataTransfer.files || []);
+    if (files.length) uploadFiles(files);
+  });
+
+  // Chat
+  const chatInput = document.getElementById("chat-input");
+  const chatSend = document.getElementById("chat-send");
+  chatSend.addEventListener("click", () => {
+    const v = chatInput.value;
+    chatInput.value = "";
+    sendChat(v);
+  });
+  chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      chatSend.click();
+    }
+  });
+  chatInput.addEventListener("input", () => {
+    chatInput.style.height = "auto";
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + "px";
+  });
+  for (const s of document.querySelectorAll("[data-suggest]")) {
+    s.addEventListener("click", () => sendChat(s.dataset.suggest));
+  }
+  document.getElementById("chat-clear").addEventListener("click", async () => {
+    if (!confirm("Clear chat history?")) return;
+    await supabase.from("chat_messages").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    state.chat = [];
+    renderChat();
+  });
+
+}
+
+// ----------------------------------------------------------------
+// Helpers
+// ----------------------------------------------------------------
+function escapeHTML(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+</script>
+</body>
+</html>
